@@ -1,15 +1,11 @@
 # LUMC_Clustering
-# author: "Casper Kant"
-# date: "11-11-2022"
 
 This repository is a compilation of scripts that can sequentially be ran with the following general workflow:
-1. Load data (Pre-processing) 
-2. Filter & Normalize data (Pre-processing)
-3. Dimension reduction
-4. Clustering*
-5. Scoring*
+1. Pre-processing: Loading data, filtering, and normalization
+2. Dimension reduction, choose from: PCA, TSNE, and UMAP
+3. Clustering & Scoring, choose from: 
 
-*The clustering and scoring has not been separated as each application of the 
-scoring metric requires specific application to the cluster algorithm used.
+Alternatively a full run can be selected in which a default workflow has been used.
+Default: Full data, low expression filtering, normalization, pca, clustering method, silhouette scoring.
 
-**"6. Package practise" speaks for itself and is irrelevant for running clustering.
+*"6. Package practise" speaks for itself and is irrelevant for running clustering.
