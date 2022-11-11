@@ -8,4 +8,4 @@ This repository is a compilation of scripts that can sequentially be ran with th
 Alternatively a full run can be selected in which a default workflow has been used.
 Default: Full data, low expression filtering, normalization, pca, clustering method, silhouette scoring.
 
-*"6. Package practise" speaks for itself and is irrelevant for running clustering.
+*6. Package practise" speaks for itself and is irrelevant for running clustering.
