@@ -1,0 +1,10 @@
+1. PCA
+2. TSNE
+3. UMAP
+
+* Add PCA code to grab PCs based on % variance. 
+**Add PCA variance barplot
+
+Notes:
+2. TSNE reduces to 2 dimensions so no variance/barplot req
+3. UMAP TBD

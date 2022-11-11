@@ -1,0 +1,135 @@
+---
+title: "PCA & tSNE"
+author: "Tom Kuipers"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    theme: paper
+always_allow_html: true
+---
+
+
+# Reading packages and variables
+
+```{r setup}
+
+## Load required libraries
+suppressPackageStartupMessages({
+  library(factoextra)
+  library(SummarizedExperiment)
+  library(edgeR)
+  library(org.Hs.eg.db)
+  library(ensembldb)
+  library(ggplot2)
+  library(Rtsne)
+  library(ggrepel)
+  library(dgeAnalysis)
+})
+
+```
+
+
+# Read data
+
+```{r data}
+
+## Load data into variable
+data_samples <- read.table(
+  file = "/path/to/samples.tsv",
+  header = TRUE,
+  sep = "\t",
+  row.names = 1,
+  check.names = FALSE
+)
+
+data_counts <- read.table(
+  file = "/path/to/counts.tsv",
+  header = TRUE,
+  sep = "\t",
+  row.names = 1,
+  check.names = FALSE
+)
+
+```
+
+
+# Filter & normalize
+
+```{r norm}
+
+## Read files as SE
+se <- readCountsFromTable(data_counts[!grepl('^__', rownames(data_counts)), ], data_samples)
+se <- addSamplesFromTableToSE(se, data_samples)
+
+## Create DGE object
+dge <- DGEList(counts = assay(se),
+               samples = colData(se),
+               genes = rowData(se))
+row.names(dge$genes) <- row.names(dge$counts)
+dge <- dge[rowSums(abs(dge$counts)) > 1, ]
+
+## Filter genes
+edger <- calcNormFactors(dge, method = "TMM")
+counts <- cpm(edger, log = TRUE, prior.count = 1)
+selectedFeatures <- rownames(edger)[apply(counts, 1, function(v)
+  sum(v >= 1)) >= (25 / 100) * ncol(counts)]
+highExprDge <- dge[selectedFeatures, , keep.lib.sizes = FALSE]
+
+## Normalize
+normDge <- calcNormFactors(highExprDge, method = "TMM")
+normDge$counts <- cpm(normDge, log = TRUE, prior.count = 1)
+
+```
+
+
+# Create PCA
+
+```{r pca}
+
+## Plot PCA
+plot_data <- pca_data(normDge)
+scatter_plot(
+  df = plot_data,
+  x = "PC1",
+  y = "PC2",
+  group = NULL,
+  size = 5,
+  title = "PCA",
+  xlab = paste0("PC1", " (", plot_data$percent[1], "%)"),
+  ylab = paste0("PC2", " (", plot_data$percent[2], "%)")
+)
+
+```
+
+
+# Create tSNE
+
+```{r tsne}
+
+## Plot tsne
+plot_data <- tsne_data(normDge)
+scatter_plot(
+  df = plot_data,
+  x = "V1",
+  y = "V2",
+  group = NULL,
+  size = 5,
+  title = "tSNE",
+  xlab = "tSNE 1",
+  ylab = "tSNE 2"
+)
+
+```
+
+
+# Session info
+
+```{r session}
+
+## SessionInfo
+sessionInfo()
+
+```
