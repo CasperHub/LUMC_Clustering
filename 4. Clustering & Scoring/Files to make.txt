@@ -1,6 +1,0 @@
-1. Centroid-based K-means (Silhouette)
-2. Connectivity-based Hierarchical (Silhouette)
-3. Density-based DBSCAN (Silhouette)
-4. Graph-based Spectral (Silhouette)
-5. Neural-Network SOM (Self organizing map) (Silhouette)
-
