@@ -1,1 +1,0 @@
-5. Neural-Network SOM (Self organizing map) (Silhouette)
